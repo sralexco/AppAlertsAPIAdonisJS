@@ -11,14 +11,25 @@ export default class AuthController {
   }
   async login({ request, response }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator)
-    const user = await User.verifyCredentials(email, password)
+    //const user = await User.verifyCredentials(email, password)
+    const user = await User.verifyCredentials(email, password).catch(() => null)
+    if (!user) {
+      return response.ok({
+        status: false,
+        idError: 1,
+        message: "Error in credentials"
+      })
+    }
+
     const token = await User.accessTokens.create(user)
 
     return response.ok({
+      status: true,
       token: token,
       ...user.serialize(),
     })
   }
+
   async logout({ auth, response }: HttpContext) {
     const user = auth.getUserOrFail()
     const token = auth.user?.currentAccessToken.identifier
@@ -28,6 +39,7 @@ export default class AuthController {
     await User.accessTokens.delete(user, token)
     return response.ok({ message: 'Logged out' })
   }
+
   async me({ auth, response }: HttpContext) {
     try {
       const user = auth.getUserOrFail()
