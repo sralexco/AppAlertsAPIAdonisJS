@@ -5,10 +5,23 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
   async register({ request, response }: HttpContext) {
-    const data = await request.validateUsing(registerValidator)
-    const user = await User.create(data)
-    return response.created(user)
+    //const data = await request.validateUsing(registerValidator)
+    const data = request.only(['email', 'password', 'name', 'phone', 'country'])
+
+    const user = await User.create(data).catch(() => null)
+    if (!user) {
+      return response.ok({
+        status: false,
+        idError: 1,
+        message: "Error when tried to created Database"
+      })
+    }
+    return response.ok({
+      status: true,
+      ...user.serialize(),
+    })
   }
+
   async login({ request, response }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator)
     //const user = await User.verifyCredentials(email, password)
