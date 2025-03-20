@@ -24,7 +24,7 @@ export default class AlertController {
     const newDate = selectedDate.set({ hour: 23, minute: 59, second: 59 }).toISO()
 
     // Fetch location data
-    const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=dfb8585c7f59fbc4a551e11aff94f2af&query="+lat+","+lon
+    const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
     const locationResponse = await fetch(apiUrl)
     const locationData = await locationResponse.json()
 
@@ -41,7 +41,7 @@ export default class AlertController {
     const alerts = await Alert.query()
       .whereBetween('date', [sevenDaysAgo, newDate])
       .where('country', country)
-      .select(['id', 'title', 'date']) // Hide `image` field
+      .select(['id', 'title', 'description','date','id_alert_type','lat','lon','country','city']) // Hide `image` field
       .exec()
 
     return response.json({ status: true, alerts: alerts })
@@ -52,7 +52,7 @@ export default class AlertController {
 
     try {
       // Fetch location data
-      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=dfb8585c7f59fbc4a551e11aff94f2af&query="+lat+","+lon
+      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
       console.log("apiUrl", apiUrl);
       const locationResponse = await fetch(apiUrl)
       const locationData = await locationResponse.json()
@@ -93,7 +93,7 @@ export default class AlertController {
     const { title, description, date, id_alert_type, lat, lon, image } = request.body()
 
     try {
-      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=dfb8585c7f59fbc4a551e11aff94f2af&query="+lat+","+lon
+      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
       const locationResponse = await fetch(apiUrl)
       const locationData = await locationResponse.json()
       const country = locationData?.data?.[0]?.country ?? null
@@ -132,11 +132,14 @@ export default class AlertController {
     }
     const allAlertTypes = await AlertType.all()
     const alertType = allAlertTypes.find((item) => item.id === alert.id_alert_type)
-    alert.$extras.type = alertType ? alertType.title : ''
+    const type = alertType ? alertType.title : ''
 
     const user = await User.find(alert.id_user)
-    alert.$extras.author = user ? user.name : 'Unknown'
-    return response.json({ status: true, alert: alert })
+    const author = user ? user.name : 'Unknown'
+
+    return response.json({ status: true, alert: { ...alert.toJSON(),
+                                                 type: type,
+                                                 author: author } })
   }
 
   public async delete({ params, response }: HttpContext) {
