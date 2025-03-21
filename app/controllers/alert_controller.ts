@@ -10,7 +10,7 @@ export default class AlertController {
     const idUser = request.input('id_user')
     const alerts = await Alert.query()
       .where('id_user', idUser)
-      .select(['id', 'title', 'date', 'country']) // Hide `image` field
+      .select(['id', 'title', 'description','date','id_alert_type','lat','lon','country','city']) // Hide `image` field
       .exec()
     return response.json({ status: true, alerts: alerts })
   }
