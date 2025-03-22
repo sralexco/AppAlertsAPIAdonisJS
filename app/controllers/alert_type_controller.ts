@@ -5,7 +5,7 @@ export default class AlertTypeController {
 
   public async list({ request, response }: HttpContext) {
     const alertTypes = await AlertType.query();
-    return response.json({ status: true, alerts: alertTypes });
+    return response.json({ status: true, types: alertTypes });
   }
 
   public async store({ request, response }: HttpContext) {
