@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string('name', 254).notNullable()
       table.string('phone', 254).notNullable()
       table.string('country', 254).notNullable()
+      table.text('image', 'longtext')
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

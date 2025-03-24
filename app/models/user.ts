@@ -29,6 +29,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare country: string | null
 
+  @column()
+  declare image: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
