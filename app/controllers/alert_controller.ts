@@ -90,7 +90,7 @@ export default class AlertController {
   }
 
   public async update({ request, params, response }: HttpContext) {
-    const { title, description, date, id_alert_type, lat, lon, image } = request.body()
+    const { title, description, id_alert_type, lat, lon, image } = request.body()
 
     try {
       const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
@@ -108,7 +108,6 @@ export default class AlertController {
       alert.merge({
         title,
         description,
-        date,
         id_alert_type,
         lat,
         lon,
