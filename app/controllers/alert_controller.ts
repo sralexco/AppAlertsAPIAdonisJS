@@ -24,7 +24,7 @@ export default class AlertController {
     const newDate = selectedDate.set({ hour: 23, minute: 59, second: 59 }).toISO()
 
     // Fetch location data
-    const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
+    const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=7c1ba0d6667a04b71451243e910e743a&query="+lat+","+lon
     const locationResponse = await fetch(apiUrl)
     const locationData = await locationResponse.json()
 
@@ -52,7 +52,7 @@ export default class AlertController {
 
     try {
       // Fetch location data
-      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
+      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=7c1ba0d6667a04b71451243e910e743a&query="+lat+","+lon
       console.log("apiUrl", apiUrl);
       const locationResponse = await fetch(apiUrl)
       const locationData = await locationResponse.json()
@@ -93,7 +93,7 @@ export default class AlertController {
     const { title, description, id_alert_type, lat, lon, image } = request.body()
 
     try {
-      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=16b59abadade7750b8425b0bd5b894ee&query="+lat+","+lon
+      const apiUrl = "http://api.positionstack.com/v1/reverse?access_key=7c1ba0d6667a04b71451243e910e743a&query="+lat+","+lon
       const locationResponse = await fetch(apiUrl)
       const locationData = await locationResponse.json()
       const country = locationData?.data?.[0]?.country ?? null

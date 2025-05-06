@@ -18,6 +18,9 @@ import UserController from '#controllers/user_controller'
 router.group(() => {
   router.post('register', [AuthController, 'register'])
   router.post('login', [AuthController, 'login'])
+}).prefix('/api')
+
+router.group(() => {
   router.post('logout', [AuthController, 'logout']).use(middleware.auth())
   router.get('me', [AuthController, 'me']).use(middleware.auth())
 
@@ -34,11 +37,4 @@ router.group(() => {
   router.post('user/:id', [UserController, 'show'])
   router.post('user/:id/update', [UserController, 'update'])
 
-
-}).prefix('/api')
-
-router.group(() => {
-
-  //router.get('posts', [PostsController, 'index'])
-  //router.get('posts/:id', [PostsController, 'show'])
 }).prefix('/api').use(middleware.auth())
